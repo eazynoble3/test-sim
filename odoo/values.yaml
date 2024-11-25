@@ -607,6 +607,14 @@ persistence:
   ##
   storageClass: "local-odoo"
   postgresStorageClass: "postgres-sc"
+  odooPVC:
+    size: 10Gi
+    accessModes:
+      - ReadWriteOnce
+  postgresPVC:
+    size: 5Gi
+    accessModes:
+      - ReadWriteOnce
   ## @param persistence.accessModes [array] Persistent Volume access modes
   ##
   accessModes:
