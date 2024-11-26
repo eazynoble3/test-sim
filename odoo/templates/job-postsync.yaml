@@ -15,9 +15,10 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - |
-            apt-get update && apt-get install -y openssh-client;
-            echo "Running preSync shell script...";
-            {{ .Values.preSync.script | quote }}
+            apt-get update && apt-get install -y openssh-client
+            echo "Starting Odoo update on the server..."
+            ssh -o StrictHostKeyChecking=no root@k8s.wesolved.cloud "sh /etc/wesolved/build/scripts/main-deploy.sh"
+            echo "Odoo update complete."
         volumeMounts:
         - name: ssh-keys
           mountPath: /root/.ssh
