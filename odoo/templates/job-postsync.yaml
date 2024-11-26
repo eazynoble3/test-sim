@@ -12,10 +12,10 @@ spec:
       containers:
       - name: post-sync-script
         image: "{{ .Values.postSync.image }}"
-        command: ["sh", "-c"]
+        command: ["/bin/sh", "-c"]
         args:
           - |
-            echo "Running PostSync script...";
-            {{ .Values.postSync.command | quote }}
+            echo "Running PostSync shell script...";
+            {{ .Values.postSync.script | quote }}
       restartPolicy: OnFailure
 {{- end }}
