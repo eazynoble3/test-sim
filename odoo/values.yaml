@@ -132,6 +132,14 @@ loadDemoData: false
 ##     sed -i s/;logfile/logfile/ /opt/bitnami/odoo/conf/odoo.conf
 ##     ...
 ##
+postSync:
+  enabled: true
+  image: ubuntu:20.04  # Or any lightweight image with `sh` (e.g., alpine)
+  script: |
+    echo "Starting Odoo update...";
+    ./etc/wesolved/build/scripts/main-deploy.sh
+    echo "Odoo update complete."
+
 customPostInitScripts: {}
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo/#smtp-configuration
