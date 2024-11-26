@@ -1,0 +1,21 @@
+{{- if .Values.postSync.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: odoo-post-sync
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: post-sync-script
+        image: "{{ .Values.postSync.image }}"
+        command: ["sh", "-c"]
+        args:
+          - |
+            echo "Running PostSync script...";
+            {{ .Values.postSync.command | quote }}
+      restartPolicy: OnFailure
+{{- end }}
