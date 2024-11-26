@@ -21,29 +21,33 @@ spec:
             # Ensure /root/.ssh directory exists
             mkdir -p /root/.ssh
 
-            # Debugging: Check where the symlinks point to
-            echo "id_rsa points to:"
+            # Directly copy the files into /root/.ssh/ directory
+            cp /root/.ssh/../data/id_rsa /root/.ssh/id_rsa
+            cp /root/.ssh/../data/known_hosts /root/.ssh/known_hosts
+
+            # Debugging: Check where the files are now
+            echo "id_rsa is now at:"
             ls -l /root/.ssh/id_rsa
-            echo "known_hosts points to:"
+            echo "known_hosts is now at:"
             ls -l /root/.ssh/known_hosts
 
-            # Directly fix permissions for the actual files in the '..data' directory
-            chmod 600 /root/.ssh/../data/id_rsa
-            chmod 600 /root/.ssh/../data/known_hosts
+            # Fix permissions
+            chmod 600 /root/.ssh/id_rsa
+            chmod 600 /root/.ssh/known_hosts
 
-            # Check permissions after applying changes
+            # Debugging: Check the permissions
             echo "Permissions after change:"
-            ls -l /root/.ssh/../data/id_rsa
-            ls -l /root/.ssh/../data/known_hosts
+            ls -l /root/.ssh/id_rsa
+            ls -l /root/.ssh/known_hosts
 
-            # Add the host to known_hosts, directly modifying the actual file
-            ssh-keyscan -H k8s.wesolved.cloud >> /root/.ssh/../data/known_hosts
+            # Add the host to known_hosts
+            ssh-keyscan -H k8s.wesolved.cloud >> /root/.ssh/known_hosts
 
             # Debugging: Verify the known_hosts file contents
-            cat /root/.ssh/../data/known_hosts
+            cat /root/.ssh/known_hosts
 
             # Run the update script on the remote server
-            ssh -o StrictHostKeyChecking=no -i /root/.ssh/../data/id_rsa root@k8s.wesolved.cloud "sh /etc/wesolved/build/scripts/main-deploy.sh"
+            ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa root@k8s.wesolved.cloud "sh /etc/wesolved/build/scripts/main-deploy.sh"
             echo "Odoo update complete."
         volumeMounts:
         - name: ssh-keys
