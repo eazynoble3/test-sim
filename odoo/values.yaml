@@ -134,7 +134,7 @@ loadDemoData: false
 ##
 postSync:
   enabled: true
-  image: ubuntu:20.04  # Or any lightweight image with `sh` (e.g., alpine)
+  image: ubuntu:20.04
   script: |
     echo "Starting Odoo update...";
     sh /etc/wesolved/build/scripts/main-deploy.sh
