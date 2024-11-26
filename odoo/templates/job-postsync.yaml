@@ -16,6 +16,14 @@ spec:
         args:
           - |
             echo "Running preSync shell script...";
-            {{ .Values.preSync.script | quote }}
+            sh /scripts/main-deploy.sh
+            echo "Odoo update complete."
+        volumeMounts:
+        - name: script-volume
+          mountPath: /scripts
       restartPolicy: OnFailure
+      volumes:
+      - name: script-volume
+        hostPath:
+          path: /etc/wesolved/build/scripts
 {{- end }}
