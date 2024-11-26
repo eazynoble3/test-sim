@@ -15,7 +15,16 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - |
+            apt-get update && apt-get install -y openssh-client;
             echo "Running preSync shell script...";
             {{ .Values.preSync.script | quote }}
+        volumeMounts:
+        - name: ssh-keys
+          mountPath: /root/.ssh
+          readOnly: true
       restartPolicy: OnFailure
+      volumes:
+      - name: ssh-keys
+        secret:
+          secretName: ssh-keys
 {{- end }}
