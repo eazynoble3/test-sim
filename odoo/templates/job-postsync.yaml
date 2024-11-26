@@ -1,11 +1,7 @@
-{{- if .Values.preSync.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: odoo-pre-sync
-  annotations:
-    argocd.argoproj.io/hook: PreSync
-    argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
   template:
     spec:
@@ -21,21 +17,25 @@ spec:
             # Ensure the /root/.ssh directory exists
             mkdir -p /root/.ssh
             
-            # Fix permissions for the SSH key
+            # Copy the SSH private key from ConfigMap to the correct location
+            cp /config/ssh-config/id_rsa /root/.ssh/id_rsa
+
+            # Fix permissions for the SSH key (This ensures the private key has the correct permissions)
             chmod 600 /root/.ssh/id_rsa
-            # Add the host to known_hosts
+            chown root:root /root/.ssh/id_rsa
+
+            # Add the host to known_hosts (Use the -H flag to append the host key)
             ssh-keyscan -H k8s.wesolved.cloud >> /root/.ssh/known_hosts
-            
+
             # Run the update script on the remote server
             ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa root@k8s.wesolved.cloud "sh /etc/wesolved/build/scripts/main-deploy.sh"
             echo "Odoo update complete."
         volumeMounts:
-        - name: ssh-keys
-          mountPath: /root/.ssh
-          readOnly: false
+        - name: ssh-config
+          mountPath: /config/ssh-config
+          readOnly: true
       restartPolicy: OnFailure
       volumes:
-      - name: ssh-keys
-        secret:
-          secretName: ssh-keys
-{{- end }}
+      - name: ssh-config
+        configMap:
+          name: ssh-config
