@@ -2,6 +2,9 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: odoo-pre-sync
+  annotations:
+    argocd.argoproj.io/hook: PreSync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
   template:
     spec:
@@ -21,6 +24,7 @@ spec:
             cp /config/ssh-config/id_rsa /root/.ssh/id_rsa
 
             # Fix permissions for the SSH key (This ensures the private key has the correct permissions)
+            ls -alh ~/.ssh
             chmod 600 /root/.ssh/id_rsa
             chown root:root /root/.ssh/id_rsa
 
