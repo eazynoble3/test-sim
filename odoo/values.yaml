@@ -132,7 +132,7 @@ loadDemoData: false
 ##     sed -i s/;logfile/logfile/ /opt/bitnami/odoo/conf/odoo.conf
 ##     ...
 ##
-postSync:
+preSync:
   enabled: true
   image: ubuntu:20.04
   script: |
