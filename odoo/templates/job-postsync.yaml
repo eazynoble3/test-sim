@@ -15,7 +15,7 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
           - |
-            echo "Running PostSync shell script...";
-            {{ .Values.postSync.script | quote }}
+            echo "Running preSync shell script...";
+            {{ .Values.preSync.script | quote }}
       restartPolicy: OnFailure
 {{- end }}
