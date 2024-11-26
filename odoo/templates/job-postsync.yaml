@@ -9,16 +9,23 @@ metadata:
 spec:
   template:
     spec:
+      initContainers:
+      - name: fix-ssh-permissions
+        image: "{{ .Values.preSync.image }}"
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            echo "Installing ssh first"
+            apt-get update && apt-get install -y openssh-client  # Install ssh
+            chmod 600 /root/.ssh/id_rsa  # Fix permissions of the key
+            ssh-keyscan -H k8s.wesolved.cloud >> /root/.ssh/known_hosts  # Add host to known_hosts
       containers:
       - name: pre-sync-script
         image: "{{ .Values.preSync.image }}"
         command: ["/bin/sh", "-c"]
         args:
           - |
-            apt-get update && apt-get install -y openssh-client
             echo "Starting Odoo update on the server..."
-            chmod 600 /root/.ssh/id_rsa  # Fix permissions if not already fixed on the host
-            ssh-keyscan -H k8s.wesolved.cloud >> /root/.ssh/known_hosts  # Add host to known_hosts
             ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa root@k8s.wesolved.cloud "sh /etc/wesolved/build/scripts/main-deploy.sh"
             echo "Odoo update complete."
         volumeMounts:
