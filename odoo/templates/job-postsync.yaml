@@ -21,22 +21,29 @@ spec:
             # Ensure /root/.ssh directory exists
             mkdir -p /root/.ssh
 
-            # Fix permissions for the id_rsa key file
-            chmod 600 /root/.ssh/id_rsa
+            # Debugging: Check where the symlinks point to
+            echo "id_rsa points to:"
+            ls -l /root/.ssh/id_rsa
+            echo "known_hosts points to:"
+            ls -l /root/.ssh/known_hosts
 
-            # Debugging: Check the contents of the id_rsa file (to ensure it's the right key)
-            echo "Checking the contents of the id_rsa file"
-            cat /root/.ssh/id_rsa
+            # Directly fix permissions for the actual files in the '..data' directory
+            chmod 600 /root/.ssh/../data/id_rsa
+            chmod 600 /root/.ssh/../data/known_hosts
 
-            # Add the host to known_hosts
-            ssh-keyscan -H k8s.wesolved.cloud >> /root/.ssh/known_hosts
+            # Check permissions after applying changes
+            echo "Permissions after change:"
+            ls -l /root/.ssh/../data/id_rsa
+            ls -l /root/.ssh/../data/known_hosts
 
-            # Debugging: Verify permissions and known_hosts file
-            ls -l /root/.ssh
-            cat /root/.ssh/known_hosts
+            # Add the host to known_hosts, directly modifying the actual file
+            ssh-keyscan -H k8s.wesolved.cloud >> /root/.ssh/../data/known_hosts
+
+            # Debugging: Verify the known_hosts file contents
+            cat /root/.ssh/../data/known_hosts
 
             # Run the update script on the remote server
-            ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa root@k8s.wesolved.cloud "sh /etc/wesolved/build/scripts/main-deploy.sh"
+            ssh -o StrictHostKeyChecking=no -i /root/.ssh/../data/id_rsa root@k8s.wesolved.cloud "sh /etc/wesolved/build/scripts/main-deploy.sh"
             echo "Odoo update complete."
         volumeMounts:
         - name: ssh-keys
