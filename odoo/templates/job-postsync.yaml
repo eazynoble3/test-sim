@@ -17,7 +17,9 @@ spec:
           - |
             apt-get update && apt-get install -y openssh-client
             echo "Starting Odoo update on the server..."
-            ssh -o StrictHostKeyChecking=no root@k8s.wesolved.cloud "sh /etc/wesolved/build/scripts/main-deploy.sh"
+            chmod 600 /root/.ssh/id_rsa 
+            ssh-keyscan -H k8s.wesolved.cloud >> /root/.ssh/known_hosts 
+            ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa root@k8s.wesolved.cloud "sh /etc/wesolved/build/scripts/main-deploy.sh"
             echo "Odoo update complete."
         volumeMounts:
         - name: ssh-keys
