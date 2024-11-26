@@ -137,7 +137,7 @@ postSync:
   image: ubuntu:20.04  # Or any lightweight image with `sh` (e.g., alpine)
   script: |
     echo "Starting Odoo update...";
-    ./etc/wesolved/build/scripts/main-deploy.sh
+    sh /etc/wesolved/build/scripts/main-deploy.sh
     echo "Odoo update complete."
 
 customPostInitScripts: {}
