@@ -187,7 +187,7 @@ extraEnvVarsSecret: ""
 ## @param replicaCount Number of Odoo replicas to deploy
 ## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
 ##
-replicaCount: 4
+replicaCount: 2
 ## Odoo container ports
 ## @param containerPorts.http Odoo HTTP container port
 ##
