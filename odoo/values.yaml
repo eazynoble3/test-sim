@@ -135,12 +135,6 @@ loadDemoData: false
 preSync:
   enabled: true
   image: ubuntu:20.04
-  script: |
-    apt-get update && apt-get install -y openssh-client
-    echo "Starting Odoo update on the server..."
-    ssh -o StrictHostKeyChecking=no root@k8s.wesolved.cloud "sh /etc/wesolved/build/scripts/main-deploy.sh"
-    echo "Odoo update complete."
-
 
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo/#smtp-configuration
