@@ -38,7 +38,7 @@ spec:
         #- name: ssh-config
          # mountPath: /config/ssh-config
          # readOnly: true
-      #restartPolicy: OnFailure
+      restartPolicy: OnFailure
      # volumes:
      # - name: ssh-config
        # configMap:
