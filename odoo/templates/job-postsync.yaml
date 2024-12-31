@@ -34,12 +34,12 @@ spec:
             # Run the update script on the remote server
             #ssh -o StrictHostKeyChecking=no -i /root/.ssh/id_rsa root@k8s.wesolved.cloud "sh /etc/wesolved/build/scripts/main-deploy.sh"
             echo "Odoo update complete."
-        volumeMounts:
-        - name: ssh-config
-          mountPath: /config/ssh-config
-          readOnly: true
-      restartPolicy: OnFailure
-      volumes:
-      - name: ssh-config
-        configMap:
-          name: ssh-config
+        #volumeMounts:
+        #- name: ssh-config
+         # mountPath: /config/ssh-config
+         # readOnly: true
+      #restartPolicy: OnFailure
+     # volumes:
+     # - name: ssh-config
+       # configMap:
+      #    name: ssh-config
