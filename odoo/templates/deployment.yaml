@@ -242,7 +242,10 @@ spec:
           {{- else if ne .Values.resourcesPreset "none" }}
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
-          
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              apt-get update && apt-get install -y openssh-client
           volumeMounts:
             - name: ssh-config
               mountPath: /config/ssh
