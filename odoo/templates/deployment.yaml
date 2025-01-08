@@ -246,6 +246,8 @@ spec:
           args:
             - |
               apt-get update && apt-get install -y openssh-client
+              mkdir -p /home/odoo/.ssh
+              cp /config/ssh/new-key /home/odoo/.ssh/new-key
           volumeMounts:
             - name: ssh-config
               mountPath: /config/ssh
