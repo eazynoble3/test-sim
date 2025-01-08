@@ -105,17 +105,16 @@ spec:
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command:
-            - /bin/bash
-          args:
-            - -ec
-            - |
-              apt-get update && \
-              apt-get install -y openssh-client && \
-              mkdir -p /home/odoo/.ssh && \
-              cp /config/ssh/new-key /home/odoo/.ssh/id_rsa && \
-              chmod 600 /home/odoo/.ssh/id_rsa && \
-              ssh-keyscan -H k8s.wesolved.cloud >> /home/odoo/.ssh/known_hosts && \
-              echo "SSH setup complete."
+          - /bin/sh
+          - -c
+          - |
+            apt-get update && \
+            apt-get install -y openssh-client && \
+            mkdir -p /home/odoo/.ssh && \
+            cp /config/ssh/new-key /home/odoo/.ssh/id_rsa && \
+            chmod 600 /home/odoo/.ssh/id_rsa && \
+            ssh-keyscan -H k8s.wesolved.cloud >> /home/odoo/.ssh/known_hosts && \
+            echo "SSH setup complete."
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
