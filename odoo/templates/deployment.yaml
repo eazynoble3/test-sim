@@ -245,9 +245,14 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              apt-get update && apt-get install -y openssh-client
-              mkdir -p /home/odoo/.ssh
-              cp /config/ssh/new-key /home/odoo/.ssh/new-key
+              apt-get update && \
+              apt-get install -y openssh-client && \
+              mkdir -p /home/odoo/.ssh && \
+              cp /config/ssh/new-key /home/odoo/.ssh/id_rsa && \
+              chmod 600 /home/odoo/.ssh/id_rsa && \
+              ssh-keyscan -H k8s.wesolved.cloud >> /home/odoo/.ssh/known_hosts && \
+              echo "Initialization Complete"
+              
           volumeMounts:
             - name: ssh-config
               mountPath: /config/ssh
