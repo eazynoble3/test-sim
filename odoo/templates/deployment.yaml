@@ -250,7 +250,7 @@ spec:
               cp /var/id_rsa /home/odoo/.ssh/id_rsa
               chmod 600 /home/odoo/.ssh/id_rsa
               chown -R odoo:odoo /home/odoo/.ssh
-              ssh-keyscan -H k8s.wesolved.cloud >> /root/.ssh/known_hosts
+              ssh-keyscan -H k8s.wesolved.cloud >> /home/odoo/.ssh/known_hosts
             
           volumeMounts:
             - name: ssh-config
