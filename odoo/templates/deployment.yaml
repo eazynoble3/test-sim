@@ -245,7 +245,7 @@ spec:
           
           volumeMounts:
             - name: ssh-config
-              mountPath: /var
+              mountPath: /config/ssh
               readOnly: true
             - name: odoo-data
               mountPath: /bitnami/odoo
