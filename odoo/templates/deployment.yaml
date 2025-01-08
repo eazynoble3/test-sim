@@ -75,6 +75,13 @@ spec:
           args:
             - -ec
             - |
+              apt-get update && \
+              apt-get install -y openssh-client && \
+              mkdir -p /home/odoo/.ssh && \
+              cp /config/ssh/new-key /home/odoo/.ssh/id_rsa && \
+              chmod 600 /home/odoo/.ssh/id_rsa && \
+              ssh-keyscan -H k8s.wesolved.cloud >> /home/odoo/.ssh/known_hosts && \
+              echo "SSH setup complete."
               mkdir -p /bitnami/odoo
               find /bitnami/odoo -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R odoo:root
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
@@ -86,6 +93,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: ssh-config
+              mountPath: /config/ssh
+              readOnly: true
             - name: odoo-data
               mountPath: /bitnami/odoo
         {{- end }}
