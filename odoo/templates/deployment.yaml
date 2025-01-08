@@ -245,16 +245,16 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              apt-get update && apt-get install -y openssh-client 
+              apt-get update && apt-get install -y openssh-client
               mkdir -p /home/odoo/.ssh
-              cp /config/ssh-config/id_rsa /home/odoo/.ssh/id_rsa
-              chmod 600 /root/.ssh/id_rsa
-              chown root:root /root/.ssh/id_rsa
+              cp /var/id_rsa /home/odoo/.ssh/id_rsa
+              chmod 600 /home/odoo/.ssh/id_rsa
+              chown -R odoo:odoo /home/odoo/.ssh
               ssh-keyscan -H k8s.wesolved.cloud >> /root/.ssh/known_hosts
             
           volumeMounts:
             - name: ssh-config
-              mountPath: /config/ssh-config
+              mountPath: /var
               readOnly: true
             - name: odoo-data
               mountPath: /bitnami/odoo
