@@ -245,8 +245,8 @@ spec:
           command: ["/bin/sh", "-c"]
           args:
             - |
-              apt-get update
-              apt-get install -y openssh-client
+              sudo apt-get update
+              sudo apt-get install -y openssh-client
               mkdir -p /home/odoo/.ssh
               cp /var/id_rsa /home/odoo/.ssh/id_rsa
               chmod 600 /home/odoo/.ssh/id_rsa
