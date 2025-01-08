@@ -269,7 +269,6 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
-        volumes:
         - name: ssh-config
           configMap:
             name: ssh-config
