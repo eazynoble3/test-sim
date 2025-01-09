@@ -103,7 +103,6 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.diagnosticMode.enabled }}
           command:
           - /bin/sh
           - -c
@@ -115,6 +114,7 @@ spec:
             chmod 600 /home/odoo/.ssh/id_rsa && \
             ssh-keyscan -H k8s.wesolved.cloud >> /home/odoo/.ssh/known_hosts && \
             echo "SSH setup complete."
+          {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
