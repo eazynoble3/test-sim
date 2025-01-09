@@ -93,24 +93,6 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
-      initContainers:
-      - name: ssh-setup
-        image: docker.io/bitnami/minideb:latest
-        command:
-          - /bin/sh
-          - -c
-          - |
-            apt-get update && \
-            apt-get install -y openssh-client && \
-            mkdir -p /home/odoo/.ssh && \
-            cp /config/ssh/new-key /home/odoo/.ssh/id_rsa && \
-            chmod 600 /home/odoo/.ssh/id_rsa && \
-            ssh-keyscan -H k8s.wesolved.cloud >> /home/odoo/.ssh/known_hosts && \
-            echo "SSH setup complete."
-        volumeMounts:
-        - name: ssh-config
-          mountPath: /config/ssh
-          readOnly: true
       containers:
         - name: {{ template "common.names.fullname" . }}
           image: {{ template "odoo.image" . }}
@@ -121,6 +103,17 @@ spec:
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
+          command:
+          - /bin/sh
+          - -c
+          - |
+            apt-get update && \
+            apt-get install -y openssh-client && \
+            mkdir -p /home/odoo/.ssh && \
+            cp /config/ssh/new-key /home/odoo/.ssh/id_rsa && \
+            chmod 600 /home/odoo/.ssh/id_rsa && \
+            ssh-keyscan -H k8s.wesolved.cloud >> /home/odoo/.ssh/known_hosts && \
+            echo "SSH setup complete.
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.command }}
@@ -261,6 +254,9 @@ spec:
           resources: {{- include "common.resources.preset" (dict "type" .Values.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: ssh-config
+              mountPath: /config/ssh
+              readOnly: true
             - name: odoo-data
               mountPath: /bitnami/odoo
             {{- if .Values.customPostInitScripts }}
