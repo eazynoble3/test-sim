@@ -114,7 +114,7 @@ spec:
             chmod 600 /home/odoo/.ssh/id_rsa && \
             ssh-keyscan -H k8s.wesolved.cloud >> /home/odoo/.ssh/known_hosts && \
             echo "SSH setup complete." && \
-            /opt/bitnami/scripts/odoo/run.sh"
+            /opt/bitnami/scripts/odoo/run.sh
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.command }}
